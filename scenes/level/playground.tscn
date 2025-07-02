@@ -1,6 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://cdydutfq2ebtd"]
+[gd_scene load_steps=8 format=3 uid="uid://cdydutfq2ebtd"]
 
 [ext_resource type="Texture2D" uid="uid://c13ut6ehurfrr" path="res://scenes/level/assets/textures/floor.png" id="1_dy427"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dy427"]
+sky_top_color = Color(0.344936, 0.628016, 0.7084, 1)
+sky_horizon_color = Color(0.984919, 1.07147, 1.08199, 1)
+ground_bottom_color = Color(0.352258, 0.415395, 0.377065, 1)
+ground_horizon_color = Color(0.984919, 1.07147, 1.08199, 1)
+energy_multiplier = 0.7
+
+[sub_resource type="Sky" id="Sky_poowc"]
+sky_material = SubResource("ProceduralSkyMaterial_dy427")
+
+[sub_resource type="Environment" id="Environment_fb1mk"]
+background_mode = 2
+sky = SubResource("Sky_poowc")
+tonemap_mode = 2
+ssao_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_poowc"]
 
@@ -13,6 +31,17 @@ material = SubResource("StandardMaterial3D_8oj7v")
 size = Vector2(50, 50)
 
 [node name="Playground" type="Node3D"]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_color = Color(0.827451, 1, 0.886275, 1)
+light_energy = 0.7
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = SubResource("Environment_fb1mk")
 
 [node name="Floor" type="StaticBody3D" parent="."]
 

@@ -1,3 +1,10 @@
-[gd_scene format=3 uid="uid://byyhjaapm57vf"]
+[gd_scene load_steps=3 format=3 uid="uid://byyhjaapm57vf"]
+
+[ext_resource type="PackedScene" uid="uid://cdydutfq2ebtd" path="res://scenes/level/playground.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://bkrhhthm7oy7u" path="res://entities/player/player.tscn" id="2_0wfyh"]
 
 [node name="Main" type="Node"]
+
+[node name="Playground" parent="." instance=ExtResource("1_o5qli")]
+
+[node name="Player" parent="." instance=ExtResource("2_0wfyh")]

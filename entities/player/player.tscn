@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bkrhhthm7oy7u"]
+
+[ext_resource type="Script" uid="uid://diu4kltacymeo" path="res://entities/player/player.gd" id="1_abrql"]
+[ext_resource type="PackedScene" uid="uid://dqgi3r3t41fyk" path="res://assets/models/figurine.glb" id="1_symyc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_symyc"]
+radius = 0.16
+height = 0.7
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_abrql")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+shape = SubResource("CapsuleShape3D_symyc")
+
+[node name="figurine2" parent="." instance=ExtResource("1_symyc")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 3.74435, 5.64531, 3.74435)
+current = true
+fov = 50.0
+size = 10.0
