@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkrhhthm7oy7u"]
+[gd_scene load_steps=13 format=3 uid="uid://bkrhhthm7oy7u"]
 
 [ext_resource type="Script" uid="uid://diu4kltacymeo" path="res://entities/player/player.gd" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://dqgi3r3t41fyk" path="res://assets/models/figurine.glb" id="1_symyc"]
@@ -6,6 +6,9 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_symyc"]
 radius = 0.16
 height = 0.7
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bls4j"]
+animation = &"sprint"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sglur"]
 animation = &"static"
@@ -18,20 +21,32 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sglur"]
 advance_mode = 2
-advance_expression = "velocity.normalized().length() > 0.1"
+advance_expression = "velocity.length() > 0.1"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fkugw"]
 xfade_time = 0.08
 advance_mode = 2
-advance_expression = "velocity.normalized().length() < 0.1"
+advance_expression = "velocity.length() < 0.1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8fjmc"]
+xfade_time = 0.05
+advance_mode = 2
+advance_expression = "is_equal_approx(velocity.length(), SPRINT_SPEED)"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qiwj3"]
+xfade_time = 0.05
+advance_mode = 2
+advance_expression = "not is_equal_approx(velocity.length(), SPRINT_SPEED)"
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_fkugw"]
+states/sprint/node = SubResource("AnimationNodeAnimation_bls4j")
+states/sprint/position = Vector2(504.804, 20)
 states/static/node = SubResource("AnimationNodeAnimation_sglur")
-states/static/position = Vector2(366, 100)
+states/static/position = Vector2(355, 100)
 states/walk/node = SubResource("AnimationNodeAnimation_abrql")
-states/walk/position = Vector2(509.804, 103.305)
-transitions = ["Start", "static", SubResource("AnimationNodeStateMachineTransition_bls4j"), "static", "walk", SubResource("AnimationNodeStateMachineTransition_sglur"), "walk", "static", SubResource("AnimationNodeStateMachineTransition_fkugw")]
-graph_offset = Vector2(-89.1957, 8.30453)
+states/walk/position = Vector2(504.804, 100)
+transitions = ["Start", "static", SubResource("AnimationNodeStateMachineTransition_bls4j"), "static", "walk", SubResource("AnimationNodeStateMachineTransition_sglur"), "walk", "static", SubResource("AnimationNodeStateMachineTransition_fkugw"), "walk", "sprint", SubResource("AnimationNodeStateMachineTransition_8fjmc"), "sprint", "walk", SubResource("AnimationNodeStateMachineTransition_qiwj3")]
+graph_offset = Vector2(-148.196, -41.6955)
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_abrql")

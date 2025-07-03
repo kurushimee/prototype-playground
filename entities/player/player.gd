@@ -1,7 +1,9 @@
 class_name Player
 extends CharacterBody3D
 
-const SPEED = 5
+const WALK_SPEED = 5.0
+const SPRINT_SPEED = 7.5
+
 const ROTATION_SPEED = 10
 
 @onready var body: Node3D = $figurine2
@@ -21,15 +23,17 @@ func add_gravity(delta: float) -> void:
 
 func handle_movement(delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	var direction := (camera.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var horizontal_basis := Basis(Vector3.UP, camera.global_rotation.y)
+	var direction := (horizontal_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		var speed := SPRINT_SPEED if Input.is_action_pressed(&"sprint") else WALK_SPEED
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
 
 		rotate_body(direction, delta)
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, WALK_SPEED)
+		velocity.z = move_toward(velocity.z, 0, WALK_SPEED)
 
 
 func rotate_body(direction: Vector3, delta: float) -> void:
