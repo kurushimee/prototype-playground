@@ -49,3 +49,7 @@ move_right={
 common/physics_jitter_fix=0.0
 3d/physics_engine="Jolt Physics"
 common/physics_interpolation=true
+
+[rendering]
+
+anti_aliasing/quality/msaa_3d=3

@@ -21,6 +21,7 @@ advance_mode = 2
 advance_expression = "velocity.normalized().length() > 0.1"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fkugw"]
+xfade_time = 0.08
 advance_mode = 2
 advance_expression = "velocity.normalized().length() < 0.1"
 

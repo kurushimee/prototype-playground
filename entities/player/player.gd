@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody3D
 
-const SPEED = 6
+const SPEED = 5
 const ROTATION_SPEED = 10
 
 @onready var body: Node3D = $figurine2
