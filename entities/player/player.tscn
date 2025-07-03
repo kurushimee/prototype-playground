@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bkrhhthm7oy7u"]
+[gd_scene load_steps=54 format=3 uid="uid://bkrhhthm7oy7u"]
 
 [ext_resource type="Script" uid="uid://diu4kltacymeo" path="res://entities/player/player.gd" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://bwfonpv48qfs1" path="res://assets/models/figurine.glb" id="2_a1qjk"]
@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://dhyn4117588yy" path="res://entities/player/assets/sounds/footstep07.ogg" id="10_we0b7"]
 [ext_resource type="AudioStream" uid="uid://cnthe56ruxdup" path="res://entities/player/assets/sounds/footstep08.ogg" id="11_mtric"]
 [ext_resource type="AudioStream" uid="uid://cbo236xdq0vh4" path="res://entities/player/assets/sounds/footstep09.ogg" id="12_eyb6c"]
+[ext_resource type="Script" uid="uid://btxwiv5ertm2c" path="res://entities/player/interaction.gd" id="13_j3ovn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_symyc"]
 radius = 0.16
@@ -1762,6 +1763,9 @@ states/walk/position = Vector2(504.804, 100)
 transitions = ["Start", "static", SubResource("AnimationNodeStateMachineTransition_bls4j"), "static", "walk", SubResource("AnimationNodeStateMachineTransition_sglur"), "walk", "static", SubResource("AnimationNodeStateMachineTransition_fkugw"), "walk", "sprint", SubResource("AnimationNodeStateMachineTransition_8fjmc"), "sprint", "walk", SubResource("AnimationNodeStateMachineTransition_qiwj3")]
 graph_offset = Vector2(-148.196, -41.6955)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_a1qjk"]
+radius = 1.5
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_abrql")
 
@@ -1782,15 +1786,27 @@ tree_root = SubResource("AnimationNodeStateMachine_fkugw")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../figurine2/AnimationPlayer")
 
+[node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_221hk")
+volume_db = -30.0
+max_polyphony = 2
+
+[node name="Interaction" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+script = ExtResource("13_j3ovn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interaction"]
+shape = SubResource("SphereShape3D_a1qjk")
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 3.74435, 5.64531, 3.74435)
 current = true
 fov = 50.0
 size = 10.0
 
-[node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
-stream = SubResource("AudioStreamRandomizer_221hk")
-volume_db = -30.0
-max_polyphony = 2
+[connection signal="area_entered" from="Interaction" to="Interaction" method="_on_area_entered"]
+[connection signal="area_exited" from="Interaction" to="Interaction" method="_on_area_exited"]
 
 [editable path="figurine2"]
