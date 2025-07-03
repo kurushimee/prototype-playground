@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkrhhthm7oy7u"]
+[gd_scene load_steps=10 format=3 uid="uid://bkrhhthm7oy7u"]
 
 [ext_resource type="Script" uid="uid://diu4kltacymeo" path="res://entities/player/player.gd" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://dqgi3r3t41fyk" path="res://assets/models/figurine.glb" id="1_symyc"]
@@ -6,6 +6,31 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_symyc"]
 radius = 0.16
 height = 0.7
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sglur"]
+animation = &"static"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_abrql"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bls4j"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sglur"]
+advance_mode = 2
+advance_expression = "velocity.normalized().length() > 0.1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fkugw"]
+advance_mode = 2
+advance_expression = "velocity.normalized().length() < 0.1"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_fkugw"]
+states/static/node = SubResource("AnimationNodeAnimation_sglur")
+states/static/position = Vector2(366, 100)
+states/walk/node = SubResource("AnimationNodeAnimation_abrql")
+states/walk/position = Vector2(509.804, 103.305)
+transitions = ["Start", "static", SubResource("AnimationNodeStateMachineTransition_bls4j"), "static", "walk", SubResource("AnimationNodeStateMachineTransition_sglur"), "walk", "static", SubResource("AnimationNodeStateMachineTransition_fkugw")]
+graph_offset = Vector2(-89.1957, 8.30453)
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_abrql")
@@ -16,8 +41,19 @@ shape = SubResource("CapsuleShape3D_symyc")
 
 [node name="figurine2" parent="." instance=ExtResource("1_symyc")]
 
+[node name="AnimationPlayer" parent="figurine2" index="1"]
+autoplay = "static"
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../figurine2")
+tree_root = SubResource("AnimationNodeStateMachine_fkugw")
+advance_expression_base_node = NodePath("..")
+anim_player = NodePath("../figurine2/AnimationPlayer")
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 3.74435, 5.64531, 3.74435)
 current = true
 fov = 50.0
 size = 10.0
+
+[editable path="figurine2"]
