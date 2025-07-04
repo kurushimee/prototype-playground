@@ -7,6 +7,8 @@ const SPRINT_SPEED = 7.5
 const ROTATION_SPEED = 10
 
 @onready var body: Node3D = $figurine2
+@onready var animation_tree: AnimationTree = $AnimationTree
+
 @onready var camera: Camera3D = $Camera3D
 
 

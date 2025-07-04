@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://bkrhhthm7oy7u"]
+[gd_scene load_steps=58 format=3 uid="uid://bkrhhthm7oy7u"]
 
 [ext_resource type="Script" uid="uid://diu4kltacymeo" path="res://entities/player/player.gd" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://bwfonpv48qfs1" path="res://assets/models/figurine.glb" id="2_a1qjk"]
@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://dhyn4117588yy" path="res://entities/player/assets/sounds/footstep07.ogg" id="10_we0b7"]
 [ext_resource type="AudioStream" uid="uid://cnthe56ruxdup" path="res://entities/player/assets/sounds/footstep08.ogg" id="11_mtric"]
 [ext_resource type="AudioStream" uid="uid://cbo236xdq0vh4" path="res://entities/player/assets/sounds/footstep09.ogg" id="12_eyb6c"]
+[ext_resource type="Script" uid="uid://j8t3ahqxmfak" path="res://entities/player/animation_tree.gd" id="13_afbqv"]
 [ext_resource type="Script" uid="uid://btxwiv5ertm2c" path="res://entities/player/interaction.gd" id="13_j3ovn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_symyc"]
@@ -1722,26 +1723,30 @@ _data = {
 &"wheelchair-sit": SubResource("Animation_13wue")
 }
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_j3ovn"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_afbqv"]
+animation = &"static"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_gx6sm"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yqrof"]
+graph_offset = Vector2(-435.036, 125.809)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_afbqv")
+nodes/Animation/position = Vector2(-160, 120)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_j3ovn")
+"nodes/Animation 2/position" = Vector2(-160, 300)
+nodes/OneShot/node = SubResource("AnimationNodeOneShot_gx6sm")
+nodes/OneShot/position = Vector2(40, 100)
+nodes/output/position = Vector2(220, 120)
+node_connections = [&"OneShot", 0, &"Animation", &"OneShot", 1, &"Animation 2", &"output", 0, &"OneShot"]
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bls4j"]
 animation = &"sprint"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sglur"]
-animation = &"static"
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_abrql"]
 animation = &"walk"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bls4j"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sglur"]
-advance_mode = 2
-advance_expression = "velocity.length() > 0.1"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fkugw"]
-xfade_time = 0.08
-advance_mode = 2
-advance_expression = "velocity.length() < 0.1"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8fjmc"]
 xfade_time = 0.05
@@ -1753,15 +1758,26 @@ xfade_time = 0.05
 advance_mode = 2
 advance_expression = "not is_equal_approx(velocity.length(), SPRINT_SPEED)"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3wlsy"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b2kln"]
+advance_mode = 2
+advance_expression = "is_equal_approx(velocity.length(), WALK_SPEED)"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_we0b7"]
+advance_mode = 2
+advance_expression = "is_zero_approx(velocity.length())"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_fkugw"]
+states/Idle/node = SubResource("AnimationNodeBlendTree_yqrof")
+states/Idle/position = Vector2(352.804, 100)
 states/sprint/node = SubResource("AnimationNodeAnimation_bls4j")
 states/sprint/position = Vector2(504.804, 20)
-states/static/node = SubResource("AnimationNodeAnimation_sglur")
-states/static/position = Vector2(355, 100)
 states/walk/node = SubResource("AnimationNodeAnimation_abrql")
 states/walk/position = Vector2(504.804, 100)
-transitions = ["Start", "static", SubResource("AnimationNodeStateMachineTransition_bls4j"), "static", "walk", SubResource("AnimationNodeStateMachineTransition_sglur"), "walk", "static", SubResource("AnimationNodeStateMachineTransition_fkugw"), "walk", "sprint", SubResource("AnimationNodeStateMachineTransition_8fjmc"), "sprint", "walk", SubResource("AnimationNodeStateMachineTransition_qiwj3")]
-graph_offset = Vector2(-148.196, -41.6955)
+transitions = ["walk", "sprint", SubResource("AnimationNodeStateMachineTransition_8fjmc"), "sprint", "walk", SubResource("AnimationNodeStateMachineTransition_qiwj3"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_3wlsy"), "Idle", "walk", SubResource("AnimationNodeStateMachineTransition_b2kln"), "walk", "Idle", SubResource("AnimationNodeStateMachineTransition_we0b7")]
+graph_offset = Vector2(-94.196, -11)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_a1qjk"]
 radius = 1.5
@@ -1785,9 +1801,15 @@ root_node = NodePath("../figurine2")
 tree_root = SubResource("AnimationNodeStateMachine_fkugw")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../figurine2/AnimationPlayer")
+parameters/Idle/OneShot/active = false
+parameters/Idle/OneShot/internal_active = false
+parameters/Idle/OneShot/request = 0
+script = ExtResource("13_afbqv")
+
+[node name="IdleTimer" type="Timer" parent="AnimationTree"]
+one_shot = true
 
 [node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
-stream = SubResource("AudioStreamRandomizer_221hk")
 volume_db = -30.0
 max_polyphony = 2
 
@@ -1809,6 +1831,7 @@ size = 10.0
 [node name="AudioListener3D" type="AudioListener3D" parent="Camera3D"]
 current = true
 
+[connection signal="timeout" from="AnimationTree/IdleTimer" to="AnimationTree" method="_on_idle_timer_timeout"]
 [connection signal="area_entered" from="Interaction" to="Interaction" method="_on_area_entered"]
 [connection signal="area_exited" from="Interaction" to="Interaction" method="_on_area_exited"]
 
