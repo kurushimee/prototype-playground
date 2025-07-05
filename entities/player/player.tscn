@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://bkrhhthm7oy7u"]
+[gd_scene load_steps=62 format=3 uid="uid://bkrhhthm7oy7u"]
 
 [ext_resource type="Script" uid="uid://diu4kltacymeo" path="res://entities/player/player.gd" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://bwfonpv48qfs1" path="res://assets/models/figurine.glb" id="2_a1qjk"]
@@ -1742,6 +1742,20 @@ nodes/OneShot/position = Vector2(40, 100)
 nodes/output/position = Vector2(220, 120)
 node_connections = [&"OneShot", 0, &"Animation", &"OneShot", 1, &"Animation 2", &"output", 0, &"OneShot"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gx6sm"]
+animation = &"interact-right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yqrof"]
+animation = &"interact-left"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_3wlsy"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_gx6sm")
+blend_point_0/pos = 1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_yqrof")
+blend_point_1/pos = -1.0
+blend_mode = 1
+sync = true
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bls4j"]
 animation = &"sprint"
 
@@ -1763,21 +1777,28 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b2kln"]
 advance_mode = 2
-advance_expression = "is_equal_approx(velocity.length(), WALK_SPEED)"
+advance_expression = "velocity.length() > 0.1"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_we0b7"]
 advance_mode = 2
-advance_expression = "is_zero_approx(velocity.length())"
+advance_expression = "velocity.length() < 0.1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_eyb6c"]
+switch_mode = 2
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_fkugw"]
+states/End/position = Vector2(606, 100)
 states/Idle/node = SubResource("AnimationNodeBlendTree_yqrof")
 states/Idle/position = Vector2(352.804, 100)
+states/Interact/node = SubResource("AnimationNodeBlendSpace1D_3wlsy")
+states/Interact/position = Vector2(352.804, 12)
 states/sprint/node = SubResource("AnimationNodeAnimation_bls4j")
 states/sprint/position = Vector2(504.804, 20)
 states/walk/node = SubResource("AnimationNodeAnimation_abrql")
 states/walk/position = Vector2(504.804, 100)
-transitions = ["walk", "sprint", SubResource("AnimationNodeStateMachineTransition_8fjmc"), "sprint", "walk", SubResource("AnimationNodeStateMachineTransition_qiwj3"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_3wlsy"), "Idle", "walk", SubResource("AnimationNodeStateMachineTransition_b2kln"), "walk", "Idle", SubResource("AnimationNodeStateMachineTransition_we0b7")]
-graph_offset = Vector2(-94.196, -11)
+transitions = ["walk", "sprint", SubResource("AnimationNodeStateMachineTransition_8fjmc"), "sprint", "walk", SubResource("AnimationNodeStateMachineTransition_qiwj3"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_3wlsy"), "Idle", "walk", SubResource("AnimationNodeStateMachineTransition_b2kln"), "walk", "Idle", SubResource("AnimationNodeStateMachineTransition_we0b7"), "Interact", "Idle", SubResource("AnimationNodeStateMachineTransition_eyb6c")]
+graph_offset = Vector2(-254.196, -94)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_a1qjk"]
 radius = 1.5
@@ -1801,9 +1822,11 @@ root_node = NodePath("../figurine2")
 tree_root = SubResource("AnimationNodeStateMachine_fkugw")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../figurine2/AnimationPlayer")
+parameters/conditions/interact = false
 parameters/Idle/OneShot/active = false
 parameters/Idle/OneShot/internal_active = false
 parameters/Idle/OneShot/request = 0
+parameters/Interact/blend_position = 0.0484282
 script = ExtResource("13_afbqv")
 
 [node name="IdleTimer" type="Timer" parent="AnimationTree"]
@@ -1822,17 +1845,23 @@ script = ExtResource("13_j3ovn")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interaction"]
 shape = SubResource("SphereShape3D_a1qjk")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 3.74435, 5.64531, 3.74435)
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0.35, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 5)
+projection = 1
 current = true
 fov = 50.0
-size = 10.0
+size = 6.9
+far = 15.0
 
-[node name="AudioListener3D" type="AudioListener3D" parent="Camera3D"]
+[node name="AudioListener3D" type="AudioListener3D" parent="CameraPivot/Camera3D"]
 current = true
 
 [connection signal="timeout" from="AnimationTree/IdleTimer" to="AnimationTree" method="_on_idle_timer_timeout"]
 [connection signal="area_entered" from="Interaction" to="Interaction" method="_on_area_entered"]
 [connection signal="area_exited" from="Interaction" to="Interaction" method="_on_area_exited"]
+[connection signal="interacted" from="Interaction" to="AnimationTree" method="_on_interaction_interacted"]
 
 [editable path="figurine2"]

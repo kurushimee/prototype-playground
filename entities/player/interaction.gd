@@ -1,5 +1,7 @@
 extends Area3D
 
+signal interacted
+
 ## The current [Interactable] object closest to [Player].[br]
 ## Calls [method Interactable.set_highlight] appropriately when changing the value.
 var current_interactable: Interactable:
@@ -57,3 +59,4 @@ func find_closest_interactable() -> void:
 func interact():
 	if current_interactable:
 		current_interactable.interact()
+		interacted.emit()

@@ -17,8 +17,9 @@ sky_material = SubResource("ProceduralSkyMaterial_dy427")
 background_mode = 2
 sky = SubResource("Sky_poowc")
 tonemap_mode = 2
+tonemap_exposure = 1.75
+tonemap_white = 6.0
 ssao_enabled = true
-sdfgi_enabled = true
 glow_enabled = true
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_poowc"]
