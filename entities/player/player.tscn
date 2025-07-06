@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://bkrhhthm7oy7u"]
+[gd_scene load_steps=63 format=3 uid="uid://bkrhhthm7oy7u"]
 
 [ext_resource type="Script" uid="uid://diu4kltacymeo" path="res://entities/player/player.gd" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://bwfonpv48qfs1" path="res://assets/models/figurine.glb" id="2_a1qjk"]
@@ -1787,6 +1787,11 @@ advance_expression = "velocity.length() < 0.1"
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_afbqv"]
+xfade_time = 0.2
+advance_mode = 2
+advance_expression = "not is_zero_approx(velocity.length())"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_fkugw"]
 states/End/position = Vector2(606, 100)
 states/Idle/node = SubResource("AnimationNodeBlendTree_yqrof")
@@ -1797,8 +1802,8 @@ states/sprint/node = SubResource("AnimationNodeAnimation_bls4j")
 states/sprint/position = Vector2(504.804, 20)
 states/walk/node = SubResource("AnimationNodeAnimation_abrql")
 states/walk/position = Vector2(504.804, 100)
-transitions = ["walk", "sprint", SubResource("AnimationNodeStateMachineTransition_8fjmc"), "sprint", "walk", SubResource("AnimationNodeStateMachineTransition_qiwj3"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_3wlsy"), "Idle", "walk", SubResource("AnimationNodeStateMachineTransition_b2kln"), "walk", "Idle", SubResource("AnimationNodeStateMachineTransition_we0b7"), "Interact", "Idle", SubResource("AnimationNodeStateMachineTransition_eyb6c")]
-graph_offset = Vector2(-254.196, -94)
+transitions = ["walk", "sprint", SubResource("AnimationNodeStateMachineTransition_8fjmc"), "sprint", "walk", SubResource("AnimationNodeStateMachineTransition_qiwj3"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_3wlsy"), "Idle", "walk", SubResource("AnimationNodeStateMachineTransition_b2kln"), "walk", "Idle", SubResource("AnimationNodeStateMachineTransition_we0b7"), "Interact", "Idle", SubResource("AnimationNodeStateMachineTransition_eyb6c"), "Interact", "walk", SubResource("AnimationNodeStateMachineTransition_afbqv")]
+graph_offset = Vector2(-108.196, -79)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_a1qjk"]
 radius = 1.5
@@ -1822,7 +1827,6 @@ root_node = NodePath("../figurine2")
 tree_root = SubResource("AnimationNodeStateMachine_fkugw")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../figurine2/AnimationPlayer")
-parameters/conditions/interact = false
 parameters/Idle/OneShot/active = false
 parameters/Idle/OneShot/internal_active = false
 parameters/Idle/OneShot/request = 0
