@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cdydutfq2ebtd"]
+[gd_scene load_steps=10 format=3 uid="uid://cdydutfq2ebtd"]
 
 [ext_resource type="Texture2D" uid="uid://c13ut6ehurfrr" path="res://scenes/level/assets/textures/floor.png" id="1_dy427"]
 [ext_resource type="PackedScene" uid="uid://boee7w6l0oefy" path="res://objects/interactables/lever/lever.tscn" id="1_poowc"]
+[ext_resource type="PackedScene" uid="uid://cfflwnfcsb8xn" path="res://objects/door/types/door_sliding.tscn" id="2_fb1mk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dy427"]
 sky_top_color = Color(0.344936, 0.628016, 0.7084, 1)
@@ -52,6 +53,9 @@ environment = SubResource("Environment_fb1mk")
 [node name="Lever" parent="Objects" instance=ExtResource("1_poowc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.13519)
 
+[node name="DoorSliding" parent="Objects" instance=ExtResource("2_fb1mk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90622, 0, -2.24462)
+
 [node name="Floor" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
@@ -60,3 +64,5 @@ debug_fill = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
 mesh = SubResource("PlaneMesh_dy427")
+
+[connection signal="pulled" from="Objects/Lever" to="Objects/DoorSliding" method="toggle"]
