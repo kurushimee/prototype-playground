@@ -15,9 +15,18 @@ script = ExtResource("1_yocvo")
 animation_player = NodePath("door-garage2/AnimationPlayer")
 metadata/_custom_type_script = "uid://cofm61rtond0i"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("BoxShape3D_vg2p5")
+
+[node name="door-garage2" parent="." instance=ExtResource("3_rv4hn")]
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="door-garage2/door-garage/door" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+remote_path = NodePath("../../../../Collider")
+
+[node name="AnimationPlayer" parent="door-garage2" index="1"]
+callback_mode_process = 0
 
 [node name="wall-doorway-garage2" parent="." instance=ExtResource("2_pjtem")]
 
@@ -26,12 +35,5 @@ shape = SubResource("BoxShape3D_vg2p5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wall-doorway-garage2/wall-doorway-garage/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_xtf8q")
 
-[node name="door-garage2" parent="." instance=ExtResource("3_rv4hn")]
-
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="door-garage2/door-garage/door" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-remote_path = NodePath("../../../../CollisionShape3D")
-update_scale = false
-
-[editable path="wall-doorway-garage2"]
 [editable path="door-garage2"]
+[editable path="wall-doorway-garage2"]

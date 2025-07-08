@@ -15,9 +15,19 @@ script = ExtResource("1_spymj")
 animation_player = NodePath("door-sliding2/AnimationPlayer")
 metadata/_custom_type_script = "uid://cofm61rtond0i"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.199512)
+[node name="Collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.2)
 shape = SubResource("BoxShape3D_lj4gl")
+
+[node name="door-sliding2" parent="." instance=ExtResource("3_t7gkl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.15)
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="door-sliding2/door-sliding/door" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.35)
+remote_path = NodePath("../../../../Collider")
+
+[node name="AnimationPlayer" parent="door-sliding2" index="1"]
+callback_mode_process = 0
 
 [node name="wall-doorway-sliding2" parent="." instance=ExtResource("2_yy48f")]
 
@@ -26,17 +36,5 @@ shape = SubResource("BoxShape3D_lj4gl")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wall-doorway-sliding2/wall-doorway-sliding/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_ywngv")
 
-[node name="door-sliding2" parent="." instance=ExtResource("3_t7gkl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.15)
-
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="door-sliding2/door-sliding/door" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.35)
-remote_path = NodePath("../../../../CollisionShape3D")
-update_rotation = false
-update_scale = false
-
-[node name="AnimationPlayer" parent="door-sliding2" index="1"]
-callback_mode_process = 0
-
-[editable path="wall-doorway-sliding2"]
 [editable path="door-sliding2"]
+[editable path="wall-doorway-sliding2"]
