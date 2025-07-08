@@ -23,6 +23,10 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/vsync/vsync_mode=3
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/fancy_editor_sounds/plugin.cfg", "res://addons/gdLinter/plugin.cfg", "res://addons/gdscript_formatter/plugin.cfg", "res://addons/script-ide/plugin.cfg")
+
 [input]
 
 move_up={
