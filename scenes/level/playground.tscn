@@ -1,9 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://cdydutfq2ebtd"]
+[gd_scene load_steps=16 format=3 uid="uid://cdydutfq2ebtd"]
 
 [ext_resource type="Texture2D" uid="uid://c13ut6ehurfrr" path="res://assets/textures/floor.png" id="1_dy427"]
 [ext_resource type="PackedScene" uid="uid://bkrhhthm7oy7u" path="res://scenes/objects/entities/player.tscn" id="1_gym53"]
 [ext_resource type="PackedScene" uid="uid://boee7w6l0oefy" path="res://scenes/objects/level_elements/lever.tscn" id="1_poowc"]
 [ext_resource type="PackedScene" uid="uid://cfflwnfcsb8xn" path="res://scenes/objects/level_elements/doors/door_sliding.tscn" id="2_fb1mk"]
+[ext_resource type="PackedScene" uid="uid://bs4uu3ojl3usj" path="res://scenes/objects/level_elements/doors/door_garage.tscn" id="3_xpb05"]
+[ext_resource type="PackedScene" uid="uid://dr4rl11blvsin" path="res://scenes/objects/level_elements/doors/door_rotate.tscn" id="4_1d25w"]
+[ext_resource type="PackedScene" uid="uid://d0jdvn1h4flsh" path="res://scenes/objects/level_elements/doors/door_sliding_double.tscn" id="6_otunh"]
+[ext_resource type="PackedScene" uid="uid://cgvj8s1xcjld" path="res://scenes/objects/level_elements/doors/door_sliding_double_round.tscn" id="7_614tx"]
+[ext_resource type="PackedScene" uid="uid://duxdpoxxke6yn" path="res://scenes/objects/level_elements/doors/door_sliding_double_wide.tscn" id="8_pi2qi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dy427"]
 sky_top_color = Color(0.344936, 0.628016, 0.7084, 1)
@@ -57,11 +62,44 @@ environment = SubResource("Environment_fb1mk")
 
 [node name="LevelElements" type="Node" parent="Objects"]
 
-[node name="Lever" parent="Objects/LevelElements" instance=ExtResource("1_poowc")]
+[node name="Levers" type="Node" parent="Objects/LevelElements"]
+
+[node name="Lever" parent="Objects/LevelElements/Levers" instance=ExtResource("1_poowc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.13519)
 
-[node name="DoorSliding" parent="Objects/LevelElements" instance=ExtResource("2_fb1mk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90622, 0, -2.24462)
+[node name="Lever2" parent="Objects/LevelElements/Levers" instance=ExtResource("1_poowc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6927)
+
+[node name="Lever3" parent="Objects/LevelElements/Levers" instance=ExtResource("1_poowc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.98833)
+
+[node name="Lever4" parent="Objects/LevelElements/Levers" instance=ExtResource("1_poowc")]
+
+[node name="Lever5" parent="Objects/LevelElements/Levers" instance=ExtResource("1_poowc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.36653)
+
+[node name="Lever6" parent="Objects/LevelElements/Levers" instance=ExtResource("1_poowc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.27673)
+
+[node name="Doors" type="Node" parent="Objects/LevelElements"]
+
+[node name="DoorGarage" parent="Objects/LevelElements/Doors" instance=ExtResource("3_xpb05")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -6.01496)
+
+[node name="DoorRotate" parent="Objects/LevelElements/Doors" instance=ExtResource("4_1d25w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -4.14979)
+
+[node name="DoorSliding" parent="Objects/LevelElements/Doors" instance=ExtResource("2_fb1mk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2.245)
+
+[node name="DoorSlidingDouble" parent="Objects/LevelElements/Doors" instance=ExtResource("6_otunh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DoorSlidingDoubleRound" parent="Objects/LevelElements/Doors" instance=ExtResource("7_614tx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 2.41535)
+
+[node name="DoorSlidingDoubleWide" parent="Objects/LevelElements/Doors" instance=ExtResource("8_pi2qi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 5.44492)
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
@@ -72,4 +110,9 @@ debug_fill = false
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
 mesh = SubResource("PlaneMesh_dy427")
 
-[connection signal="pulled" from="Objects/LevelElements/Lever" to="Objects/LevelElements/DoorSliding" method="toggle"]
+[connection signal="pulled" from="Objects/LevelElements/Levers/Lever" to="Objects/LevelElements/Doors/DoorSliding" method="toggle"]
+[connection signal="pulled" from="Objects/LevelElements/Levers/Lever2" to="Objects/LevelElements/Doors/DoorGarage" method="toggle"]
+[connection signal="pulled" from="Objects/LevelElements/Levers/Lever3" to="Objects/LevelElements/Doors/DoorRotate" method="toggle"]
+[connection signal="pulled" from="Objects/LevelElements/Levers/Lever4" to="Objects/LevelElements/Doors/DoorSlidingDouble" method="toggle"]
+[connection signal="pulled" from="Objects/LevelElements/Levers/Lever5" to="Objects/LevelElements/Doors/DoorSlidingDoubleRound" method="toggle"]
+[connection signal="pulled" from="Objects/LevelElements/Levers/Lever6" to="Objects/LevelElements/Doors/DoorSlidingDoubleWide" method="toggle"]
