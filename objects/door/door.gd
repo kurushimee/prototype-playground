@@ -16,11 +16,12 @@ signal closed
 ## and correctly change [member is_open].
 func set_is_open(new_state: bool) -> void:
 	is_open = new_state
+
 	if new_state:
-		animation_player.play(&"open")
+		animation_player.play(&"open", 0.25)
 		opened.emit()
 	else:
-		animation_player.play(&"close")
+		animation_player.play(&"close", 0.25)
 		closed.emit()
 
 

@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://cdydutfq2ebtd"]
+[gd_scene load_steps=11 format=3 uid="uid://cdydutfq2ebtd"]
 
 [ext_resource type="Texture2D" uid="uid://c13ut6ehurfrr" path="res://scenes/level/assets/textures/floor.png" id="1_dy427"]
+[ext_resource type="PackedScene" uid="uid://bkrhhthm7oy7u" path="res://entities/player/player.tscn" id="1_gym53"]
 [ext_resource type="PackedScene" uid="uid://boee7w6l0oefy" path="res://objects/interactables/lever/lever.tscn" id="1_poowc"]
 [ext_resource type="PackedScene" uid="uid://cfflwnfcsb8xn" path="res://objects/door/types/door_sliding.tscn" id="2_fb1mk"]
 
@@ -36,6 +37,8 @@ material = SubResource("StandardMaterial3D_8oj7v")
 size = Vector2(50, 50)
 
 [node name="Playground" type="Node3D"]
+
+[node name="Player" parent="." instance=ExtResource("1_gym53")]
 
 [node name="Lighting" type="Node3D" parent="."]
 
