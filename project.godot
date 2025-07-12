@@ -17,6 +17,11 @@ run/main_scene="uid://byyhjaapm57vf"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+[debug]
+
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/inferred_declaration=1
+
 [display]
 
 window/stretch/mode="canvas_items"
@@ -25,7 +30,7 @@ window/vsync/vsync_mode=3
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/fancy_editor_sounds/plugin.cfg", "res://addons/gdLinter/plugin.cfg", "res://addons/gdscript_formatter/plugin.cfg", "res://addons/script-ide/plugin.cfg")
+enabled=PackedStringArray("res://addons/SimpleFormatOnSave/plugin.cfg", "res://addons/bottom_panel_shortcuts/plugin.cfg", "res://addons/script-ide/plugin.cfg")
 
 [input]
 
