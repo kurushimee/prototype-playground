@@ -1,7 +1,6 @@
 @icon("res://assets/icons/door.png")
 class_name Door
 extends AnimatableBody3D
-## A node used for animated physical doors.
 
 signal opened
 signal closed
@@ -26,16 +25,13 @@ func set_is_open(new_state: bool) -> void:
 		closed.emit()
 
 
-## Calls [method set_is_open] to open the door.
 func open() -> void:
 	set_is_open(true)
 
 
-## Calls [method set_is_open] to close the door.
 func close() -> void:
 	set_is_open(false)
 
 
-## Calls [method set_is_open] to open the door if closed, otherwise close it.
 func toggle() -> void:
 	set_is_open(!_is_open)

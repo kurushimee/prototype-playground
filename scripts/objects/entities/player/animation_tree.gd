@@ -16,7 +16,6 @@ func _on_idle_timer_timeout() -> void:
 
 
 func _on_interaction_interacted() -> void:
-	# Plays the interact animation only from idle
 	if _playback.get_current_node() == &"Idle":
 		_playback.travel(&"Interact")
 

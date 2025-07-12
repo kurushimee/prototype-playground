@@ -17,7 +17,6 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-## Adds the [method PhysicsBody3D.get_gravity] amount of negative vertical velocity.
 func _add_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
