@@ -13,6 +13,11 @@ func _input(event: InputEvent) -> void:
 		_interact()
 
 
+func _process(_delta: float) -> void:
+	if Engine.get_process_frames() % 10 == 0:
+		_find_closest_interactable()
+
+
 func _on_area_entered(area: Area3D) -> void:
 	if area is Interactable:
 		_nearby_interactables.append(area as Interactable)
