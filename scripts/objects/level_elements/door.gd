@@ -5,7 +5,7 @@ extends AnimatableBody3D
 signal opened
 signal closed
 
-@export var _is_open: bool = false:
+@export var _is_open := false:
 	set = set_is_open
 
 @export_group("Nodes")
@@ -34,4 +34,4 @@ func close() -> void:
 
 
 func toggle() -> void:
-	set_is_open(!_is_open)
+	set_is_open(not _is_open)

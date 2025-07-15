@@ -1,13 +1,13 @@
 class_name Interactable
 extends Area3D
 
-@export var is_interactable: bool = true
+@export var is_interactable := true
 
 @export_group("Nodes")
 ## The meshes to which the highlight outline will apply.
 @export var _meshes: Array[MeshInstance3D]
 
-var interact: Callable = func() -> void: pass
+var interact := func() -> void: pass
 
 @onready var _outline_material: Material = preload("res://shaders/outline/outline_material.tres")
 
