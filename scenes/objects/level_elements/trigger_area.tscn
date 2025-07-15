@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c3epjtqmhb8ef"]
+
+[node name="TriggerArea" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false

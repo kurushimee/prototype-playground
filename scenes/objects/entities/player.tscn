@@ -1809,6 +1809,7 @@ graph_offset = Vector2(-108.196, -79)
 radius = 1.5
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_body", "_camera_pivot")]
+collision_layer = 2
 script = ExtResource("1_abrql")
 _body = NodePath("figurine2")
 _camera_pivot = NodePath("CameraPivot")
