@@ -1,63 +1,50 @@
-extends Area3D
+extends Node3D
 
-signal interacted
+var _nearest_interaction: Interactable:
+	get:
+		return _current_interactions.front()
 
-var _current_interactable: Interactable:
-	set = _set_current_interactable
-
-var _nearby_interactables: Array[Interactable]
+var _current_interactions: Array[Interactable] = []
+var _can_interact: bool = true
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed(&"interact"):
-		_interact()
+	if event.is_action_pressed("interact") and _can_interact:
+		if _current_interactions:
+			_can_interact = false
+			_nearest_interaction.set_highlight(false)
+
+			await _nearest_interaction.interact.call()
+
+			_can_interact = true
 
 
-func _process(_delta: float) -> void:
-	if Engine.get_process_frames() % 10 == 0:
-		_find_closest_interactable()
+func _physics_process(_delta: float) -> void:
+	if _current_interactions.is_empty():
+		return
+
+	if _can_interact:
+		var last_nearest: Interactable = _nearest_interaction
+		_current_interactions.sort_custom(_sort_by_nearest)
+		if _nearest_interaction != last_nearest:
+			last_nearest.set_highlight(false)
+
+		if _nearest_interaction.is_interactable:
+			_nearest_interaction.set_highlight(true)
+	else:
+		_nearest_interaction.set_highlight(false)
 
 
-func _on_area_entered(area: Area3D) -> void:
-	if area is Interactable:
-		_nearby_interactables.append(area as Interactable)
-		_find_closest_interactable()
+func _sort_by_nearest(a: Node3D, b: Node3D) -> bool:
+	var a_dist: float = global_position.distance_to(a.global_position)
+	var b_dist: float = global_position.distance_to(b.global_position)
+	return a_dist < b_dist
 
 
-func _on_area_exited(area: Area3D) -> void:
-	if area is Interactable:
-		_nearby_interactables.erase(area as Interactable)
-		_find_closest_interactable()
+func _on_interact_range_area_entered(area: Interactable) -> void:
+	_current_interactions.push_back(area)
 
 
-func _set_current_interactable(new_interactable: Interactable) -> void:
-	if _current_interactable:
-		_current_interactable.set_highlight(false)
-
-	if new_interactable:
-		new_interactable.set_highlight(true)
-
-	_current_interactable = new_interactable
-
-
-func _find_closest_interactable() -> void:
-	var best: Interactable = null
-	var best_distance: float = INF
-
-	for interactable: Interactable in _nearby_interactables:
-		if not interactable.can_interact:
-			continue
-
-		var distance: float = global_position.distance_to(interactable.global_position)
-
-		if distance < best_distance:
-			best = interactable
-			best_distance = distance
-
-	_current_interactable = best
-
-
-func _interact() -> void:
-	if _current_interactable:
-		_current_interactable.interact()
-		interacted.emit()
+func _on_interact_range_area_exited(area: Interactable) -> void:
+	_current_interactions.erase(area)
+	area.set_highlight(false)

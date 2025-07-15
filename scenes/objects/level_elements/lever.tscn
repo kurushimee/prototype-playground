@@ -1,11 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://boee7w6l0oefy"]
+[gd_scene load_steps=11 format=3 uid="uid://boee7w6l0oefy"]
 
 [ext_resource type="PackedScene" uid="uid://dr8kj8p87a7cq" path="res://assets/models/lever-single.glb" id="1_5h6g0"]
 [ext_resource type="Script" uid="uid://8ridvcj44fl1" path="res://scripts/objects/level_elements/lever.gd" id="1_av3h5"]
 [ext_resource type="AudioStream" uid="uid://vlxyetb8jijw" path="res://assets/sound/effects/metalClick.ogg" id="4_ekxr5"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_houc2"]
-radius = 0.33
+[ext_resource type="Script" uid="uid://cmc7jp7hpvarf" path="res://scripts/objects/interactable.gd" id="4_yl75j"]
 
 [sub_resource type="Animation" id="Animation_ekxr5"]
 resource_name = "toggle"
@@ -81,18 +79,13 @@ _data = {
 &"toggle-on": SubResource("Animation_2hcb5")
 }
 
-[node name="Lever" type="Area3D" node_paths=PackedStringArray("_animation_player", "_meshes")]
-collision_layer = 4
-collision_mask = 0
-monitoring = false
+[sub_resource type="SphereShape3D" id="SphereShape3D_4j46x"]
+radius = 0.319516
+
+[node name="Lever" type="Node3D" node_paths=PackedStringArray("_animation_player", "_interactable")]
 script = ExtResource("1_av3h5")
 _animation_player = NodePath("lever-single2/AnimationPlayer")
-_meshes = [NodePath("lever-single2/lever-single"), NodePath("lever-single2/lever-single/handle")]
-metadata/_custom_type_script = "uid://cmc7jp7hpvarf"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.200737, 0)
-shape = SubResource("SphereShape3D_houc2")
+_interactable = NodePath("Interactable")
 
 [node name="lever-single2" parent="." instance=ExtResource("1_5h6g0")]
 
@@ -107,5 +100,17 @@ libraries = {
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = SubResource("AudioStreamRandomizer_v27j0")
 volume_db = -10.0
+
+[node name="Interactable" type="Area3D" parent="." node_paths=PackedStringArray("_meshes")]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("4_yl75j")
+_meshes = [NodePath("../lever-single2/lever-single"), NodePath("../lever-single2/lever-single/handle")]
+metadata/_custom_type_script = "uid://cmc7jp7hpvarf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.186248, 0)
+shape = SubResource("SphereShape3D_4j46x")
 
 [editable path="lever-single2"]

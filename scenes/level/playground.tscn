@@ -59,6 +59,7 @@ environment = SubResource("Environment_fb1mk")
 [node name="Entities" type="Node" parent="Objects"]
 
 [node name="Player" parent="Objects/Entities" instance=ExtResource("1_gym53")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47789, 0, 0)
 
 [node name="LevelElements" type="Node" parent="Objects"]
 
