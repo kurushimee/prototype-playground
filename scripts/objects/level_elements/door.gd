@@ -5,7 +5,7 @@ extends AnimatableBody3D
 signal opened
 signal closed
 
-@export var _is_open := false:
+@export var _is_open: bool = false:
 	set = set_is_open
 
 @export_group("Nodes")

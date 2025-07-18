@@ -5,7 +5,7 @@ var _nearest_interaction: Interactable:
 		return _current_interactions.front()
 
 var _current_interactions: Array[Interactable] = []
-var _can_interact := true
+var _can_interact: bool = true
 
 
 func _input(event: InputEvent) -> void:
@@ -24,7 +24,7 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	if _can_interact:
-		var last_nearest := _nearest_interaction
+		var last_nearest: Interactable = _nearest_interaction
 		_current_interactions.sort_custom(_sort_by_nearest)
 		if _nearest_interaction != last_nearest:
 			last_nearest.set_highlight(false)
@@ -36,8 +36,8 @@ func _physics_process(_delta: float) -> void:
 
 
 func _sort_by_nearest(a: Node3D, b: Node3D) -> bool:
-	var a_dist := global_position.distance_to(a.global_position)
-	var b_dist := global_position.distance_to(b.global_position)
+	var a_dist: float = global_position.distance_to(a.global_position)
+	var b_dist: float = global_position.distance_to(b.global_position)
 	return a_dist < b_dist
 
 

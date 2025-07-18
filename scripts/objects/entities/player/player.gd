@@ -24,11 +24,11 @@ func _add_gravity(delta: float) -> void:
 
 ## Gets user input and changes character's velocity and rotation appropriately.
 func _handle_movement(delta: float) -> void:
-	var input_dir := Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
-	var direction := (_camera_pivot.global_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var input_dir: Vector2 = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
+	var direction: Vector3 = (_camera_pivot.global_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	if direction:
-		var speed := SPRINT_SPEED if Input.is_action_pressed(&"sprint") else WALK_SPEED
+		var speed: float = SPRINT_SPEED if Input.is_action_pressed(&"sprint") else WALK_SPEED
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
 
@@ -39,5 +39,5 @@ func _handle_movement(delta: float) -> void:
 
 
 func _rotate_body(direction: Vector3, delta: float) -> float:
-	var target_rotation := atan2(direction.x, direction.z)
+	var target_rotation: float = atan2(direction.x, direction.z)
 	return lerp_angle(_body.rotation.y, target_rotation, ROTATION_SPEED * delta)
